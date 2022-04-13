@@ -3,17 +3,20 @@ import './App.css';
 import Button from './components/Button';
 import UnOrderedList from './components/UnOrderedList';
 import InputError from './components/InputError';
+import {connect} from 'react-redux';
+import {getAllTodos} from "./store/actions/todoAction";
 
-const App = () => {
+const App = ({todos, getAllTodos}) => {
   const [data, setData] = useState(null)
   const [search, setSearch] = useState("")
   const [error, setError] = useState("")
 
-  const fetchData = () => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(data => data.json()).then(data => setData(data))
-      .catch(err => console.log(err.message));
-  }
+  React.useEffect(() => {
+    getAllTodos()
+    // eslint-disable-next-line
+  },[])
+
+  
 
   const searchResult = () => {
     fetch(`https://jsonplaceholder.typicode.com/todos/${search}`)
@@ -42,7 +45,7 @@ const App = () => {
     <div className="container">
       {/* <button onClick={fetchData}>Get Data</button><br /> */}
       <div style={{ display: 'flex' }}>
-        <Button title="Get Data" getData={fetchData} />
+        {/* <Button title="Get Data" getData={fetchData} /> */}
         <InputError type="text" name='search' value={search} placeholder="Search..." onChange={onChangeData} error={error} labelname="Search" />
         {/* <input type="text" name='search' value={search} placeholder="Search..." onChange={onChangeData}  /> */}
         <Button title="Search" getData={searchResult} />
@@ -59,4 +62,8 @@ const App = () => {
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  todos: state.todos.todos
+})
+
+export default connect(mapStateToProps, {getAllTodos}) (App);
