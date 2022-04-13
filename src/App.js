@@ -13,7 +13,7 @@ const App = ({todos, getAllTodos}) => {
 
   React.useEffect(() => {
     getAllTodos()
-    // eslint-disable-next-line
+    // eslint-disable-next-line-
   },[])
 
   
